@@ -25,7 +25,8 @@ setup(
     entry_points={
         'console_scripts': [
             'joint_publisher = h1_2_model.joint_publisher:main',
-            'fk_test_node = h1_2_model.fk_test_node:main',
+            'fk_test_position = h1_2_model.fk_test_position:main',
+            'fk_test_pose = h1_2_model.fk_test_pose:main',
         ],
 
     },
