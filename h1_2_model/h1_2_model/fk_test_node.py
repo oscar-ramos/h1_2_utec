@@ -15,7 +15,6 @@ from rclpy.node import Node
 
 from sensor_msgs.msg import JointState
 from visualization_msgs.msg import Marker
-from geometry_msgs.msg import Point
 
 import numpy as np
 import pinocchio as pin
@@ -99,22 +98,48 @@ class FKTestNode(Node):
         self.tf = TransformStamped()
         self.tf.header.frame_id = 'world'
         self.tf.child_frame_id = 'pelvis'
-        
+
+
+    def publish_floating_base_tf(self, q):
+        # ----------------------------------
+        # Publish TF world -> pelvis
+        # ----------------------------------
+        self.tf.transform.translation.x = float(q[0])
+        self.tf.transform.translation.y = float(q[1])
+        self.tf.transform.translation.z = float(q[2])
+        self.tf.transform.rotation.x = float(q[3])
+        self.tf.transform.rotation.y = float(q[4])
+        self.tf.transform.rotation.z = float(q[5])
+        self.tf.transform.rotation.w = float(q[6])
+
+        self.tf.header.stamp = self.get_clock().now().to_msg()
+        self.tf_broadcaster.sendTransform(self.tf)
 
 
     def update(self):
         # ----------------------------------
-        # Build full configuration vector q
+        # Configuration vector q
         # ----------------------------------
-        q = pin.neutral(self.model)
+        q = np.zeros(self.model.nq)
 
         # Floating base (pelvis)
-        q[0:3] = np.array([0.0, 0.0, 0.9832])
-        q[3:7] = np.array([0.0, 0.0, 0.0, 1.0])
+        q[0:3] = np.array([0.0, 0.0, 0.9832])         # Position
+        q[3:7] = np.array([0.0, 0.0, 0.0, 1.0])       # Orientation (quaternion:, x,y,z,w   )
 
         # Actuated joints
-        q[7:] = 0.0
+        q[7 + self.joint_names.index('left_shoulder_roll_joint')] = 0.5
+        q[7 + self.joint_names.index('left_shoulder_pitch_joint')] = -0.5
         q[7 + self.joint_names.index('left_elbow_joint')] = 0.5 * math.sin(self.t)
+
+        # ----------------------------------
+        # Publish JointState (for RViz robot)
+        # ----------------------------------
+        self.js.header.stamp = self.get_clock().now().to_msg()
+        self.js.position = q[7:].tolist()
+        # Publish actuated joints
+        self.joint_pub.publish(self.js)
+        # Publish floating base TF
+        self.publish_floating_base_tf(q[0:7])
 
         # ----------------------------------
         # Forward kinematics
@@ -126,13 +151,6 @@ class FKTestNode(Node):
         p = ee_pose.translation
 
         # ----------------------------------
-        # Publish JointState (for RViz robot)
-        # ----------------------------------
-        self.js.header.stamp = self.get_clock().now().to_msg()
-        self.js.position = q[7:].tolist()
-        self.joint_pub.publish(self.js)
-
-        # ----------------------------------
         # Publish Marker (FK verification)
         # ----------------------------------
         self.marker.header.stamp = self.js.header.stamp
@@ -142,20 +160,6 @@ class FKTestNode(Node):
         self.marker_pub.publish(self.marker)
 
         self.t += 0.05
-
-        # ----------------------------------
-        # Publish TF world -> pelvis
-        # ----------------------------------
-        self.tf.transform.translation.x = float(q[0])
-        self.tf.transform.translation.y = float(q[1])
-        self.tf.transform.translation.z = float(q[2])
-        self.tf.transform.rotation.x = float(q[3])
-        self.tf.transform.rotation.y = float(q[4])
-        self.tf.transform.rotation.z = float(q[5])
-        self.tf.transform.rotation.w = float(q[6])
-        
-        self.tf.header.stamp = self.get_clock().now().to_msg()
-        self.tf_broadcaster.sendTransform(self.tf)
 
 def main():
     rclpy.init()
