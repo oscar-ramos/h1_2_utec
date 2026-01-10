@@ -6,8 +6,8 @@ and publishes the end-effector position as a Marker in RViz for verification.
 It also publishes the joint states for visualization and broadcasts the TF
 from the world frame to the pelvis frame.
 
-Run it as: ros2 launch h1_2_description display-handless.launch.py
-           ros2 run h1_2_model fk_test_node
+Run it as: ros2 launch h1_2_description display_handless.launch.py
+           ros2 run h1_2_model fk_test_position
 """
 
 import rclpy

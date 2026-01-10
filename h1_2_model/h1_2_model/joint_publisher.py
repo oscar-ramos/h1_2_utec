@@ -5,7 +5,7 @@ This node publishes to the /joint_states topic at 50 Hz, simulating
 joint movements using sinusoidal functions for demonstration purposes.
 
 Launch it as: 
-    ros2 launch h1_2_description display-handless.launch.py
+    ros2 launch h1_2_description display_handless.launch.py
     ros2 run h1_2_model joint_publisher
 """
 
