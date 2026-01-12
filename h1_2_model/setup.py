@@ -35,6 +35,9 @@ setup(
             'fk_test_pose = h1_2_model.fk_test_pose:main',
             'jacobian_test = h1_2_model.jacobian_test:main',
             'jacobian_numeric_test = h1_2_model.jacobian_numeric_test:main',
+            'kinematic_controller_fixed = h1_2_model.kinematic_controller_fixed:main',
+            'kinematic_controller_wb1 = h1_2_model.kinematic_controller_wb1:main',
+            'kinematic_controller_wb2 = h1_2_model.kinematic_controller_wb2:main',
         ],
 
     },
