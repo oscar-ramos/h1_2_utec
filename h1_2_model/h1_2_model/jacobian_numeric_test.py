@@ -5,7 +5,7 @@ This node computes the Jacobian of the H1-2 robot using Pinocchio and compares
 it against a numerically computed Jacobian using finite differences. It reports 
 the maximum, mean, and Frobenius norm of the error between the two Jacobians.
 
-Run it as: ros2 run h1_2_model jacobian_numeric_test_node
+Run it as: ros2 run h1_2_model jacobian_numeric_test
 """
 
 

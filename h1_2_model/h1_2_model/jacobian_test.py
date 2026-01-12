@@ -7,7 +7,7 @@ by a small velocity in a selected joint. The direction is visualized
 as an arrow in RViz.
 
 Run it as: ros2 launch h1_2_model display_handless_jacobian.launch.py
-           ros2 run h1_2_model jacobian_test_node
+           ros2 run h1_2_model jacobian_test
 """
 
 import rclpy

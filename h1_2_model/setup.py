@@ -33,8 +33,8 @@ setup(
             'joint_publisher = h1_2_model.joint_publisher:main',
             'fk_test_position = h1_2_model.fk_test_position:main',
             'fk_test_pose = h1_2_model.fk_test_pose:main',
-            'jacobian_test_node = h1_2_model.jacobian_test_node:main',
-            'jacobian_numeric_test_node = h1_2_model.jacobian_numeric_test_node:main',
+            'jacobian_test = h1_2_model.jacobian_test:main',
+            'jacobian_numeric_test = h1_2_model.jacobian_numeric_test:main',
         ],
 
     },
